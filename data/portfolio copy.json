@@ -72,23 +72,38 @@
   "services": [
     {
       "id": "1",
-      "title": "Art Direction",
-      "description": "We help with the creation and development of online advertising ideas, with particular focus on their visual appearance."
+      "title": "AI & Agentic Workflow Automation",
+      "description": "Designing and deploying custom multi-agent systems (CrewAI, n8n) and Retrieval-Augmented Generation (RAG) pipelines. I automate complex business logic and decision-making processes to streamline operations and eliminate manual bottlenecks."
     },
     {
       "id": "2",
-      "title": "Branding",
-      "description": "We design key brand elements such as the logo, color scheme, typography, and other design components that makes your brand stand out from competitors."
+      "title": "Technical Product Management & AI Strategy",
+      "description": "Taking complex SaaS and AI products from initial concept to production release. Services include PRD authoring, product roadmap strategy, backlog prioritization, and optimizing Agile workflows to accelerate delivery speed."
     },
     {
       "id": "3",
-      "title": "Web Design",
-      "description": "We build and optimize your online presence.  Website is the digital entry point into your business and a powerful revenue channel."
+      "title": "Machine Learning & Computer Vision Development",
+      "description": "Building, fine-tuning, and deploying high-accuracy machine learning and deep learning models (including Computer Vision and NLP). I bridge the gap between AI research and production-grade execution."
     },
     {
       "id": "4",
-      "title": "3D Design",
-      "description": "We combine creative design and technical skills to build striking 3D visualisations that bring your project to life."
+      "title": "Full-Stack & Backend Systems Engineering",
+      "description": "Architecting scalable, high-availability web platforms and RESTful APIs using ASP.NET Core, FastAPI, React, Next.js, and enterprise databases (PostgreSQL, Supabase, SQL Server)."
+    },
+    {
+      "id": "5",
+      "title": "Data Analytics & Business Intelligence",
+      "description": "Transforming raw data into actionable growth strategies through custom interactive dashboards (Power BI, PostHog, Google Analytics), KPI definition, and statistical modeling to drive high-ROI decision-making."
+    },
+    {
+      "id": "6",
+      "title": "End-to-End Quality Assurance (QA) & Testing",
+      "description": "Ensuring zero critical production defects through automated end-to-end testing suites (Playwright, Selenium, PyTest), RESTful API validation (Postman), and thorough manual exploratory/UAT testing."
+    },
+    {
+      "id": "7",
+      "title": "Business Process Optimization & Venture Growth",
+      "description": "Analyzing business workflows, supply chain efficiency, and customer acquisition funnels to slash operational costs, refine unit economics, and improve overall product margins."
     }
   ],
   "aboutpara": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
