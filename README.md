@@ -24,18 +24,6 @@ I design, build, and ship production-grade software platforms, data systems, and
 
 ---
 
-## 💻 Tech Stack
-
-**Languages:** JavaScript, HTML5, CSS, Python, Go
-
-**Frameworks & Tools:** React, TypeScript, Node.js, Next.js, ASP.NET Core, FastAPI
-
-**Databases & Services:** PostgreSQL, Supabase, SQL Server
-
-**Design & Analytics:** Figma, AdobeXD, AWS, Power BI, PostHog, Google Analytics
-
----
-
 ## 🏃 Quick Start
 
 1. Clone this repository

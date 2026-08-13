@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://husamalzain.github.io/Husam/sitemap.xml
