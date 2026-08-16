@@ -2,6 +2,9 @@
   "name": "react-portfolio-template",
   "version": "3.0",
   "private": true,
+  "registries": {
+    "@react-bits": "https://reactbits.dev/r/{name}.json"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

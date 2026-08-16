@@ -1,142 +1,82 @@
-import { useRef } from "react";
-import Header from "../components/Header";
-import ServiceCard from "../components/ServiceCard";
+import { useEffect, useRef, useState } from "react";
+import Head from "next/head";
+import Link from "next/link";
+import data from "../data/portfolio.json";
+import AuroraField from "../components/AuroraField";
+import Footer from "../components/Footer";
 import Socials from "../components/Socials";
 import WorkCard from "../components/WorkCard";
-import { useIsomorphicLayoutEffect } from "../utils";
-import { stagger } from "../animations";
-import Footer from "../components/Footer";
-import Head from "next/head";
-import Button from "../components/Button";
-import Link from "next/link";
-import Cursor from "../components/Cursor";
-
-// Local Data
-import data from "../data/portfolio.json";
+import ServiceCard from "../components/ServiceCard";
 
 export default function Home() {
-  // Ref
-  const workRef = useRef();
-  const aboutRef = useRef();
-  const textOne = useRef();
-  const textTwo = useRef();
-  const textThree = useRef();
-  const textFour = useRef();
+  const workRef = useRef(null);
+  const aboutRef = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Handling Scroll
-  const handleWorkScroll = () => {
-    window.scrollTo({
-      top: workRef.current.offsetTop,
-      left: 0,
-      behavior: "smooth",
-    });
-  };
-
-  const handleAboutScroll = () => {
-    window.scrollTo({
-      top: aboutRef.current.offsetTop,
-      left: 0,
-      behavior: "smooth",
-    });
-  };
-
-  useIsomorphicLayoutEffect(() => {
-    stagger(
-      [textOne.current, textTwo.current, textThree.current, textFour.current],
-      { y: 40, x: -10, transform: "scale(0.95) skew(10deg)" },
-      { y: 0, x: 0, transform: "scale(1)" }
-    );
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 32);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const scrollTo = (ref) => ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const heroLine = [data.headerTaglineOne, data.headerTaglineTwo, data.headerTaglineThree, data.headerTaglineFour].filter(Boolean);
+
   return (
-    <div className={`relative ${data.showCursor && "cursor-none"}`}>
-      {data.showCursor && <Cursor />}
-      <Head>
-        <title>{data.name}</title>
-      </Head>
+    <div className="site-shell">
+      <Head><title>{data.name} — AI Engineer & Technical Leader</title></Head>
+      <AuroraField />
+      <header className={`site-nav ${scrolled ? "site-nav-scrolled" : ""}`}>
+        <button className="brand-mark" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Back to top">
+          <span className="brand-orbit" />{data.name}<span className="brand-dot">.</span>
+        </button>
+        <nav className="desktop-nav" aria-label="Primary navigation">
+          <button onClick={() => scrollTo(workRef)}>Work</button>
+          <button onClick={() => scrollTo(aboutRef)}>About</button>
+          {data.showBlog && <Link href="/blog">Journal</Link>}
+          {data.showResume && <Link href="/resume">Resume</Link>}
+          <a className="nav-contact" href="mailto:husam1551@gmail.com">Start a conversation <span>↗</span></a>
+        </nav>
+      </header>
 
-      <div className="gradient-circle"></div>
-      <div className="gradient-circle-bottom"></div>
-
-      <div className="container mx-auto mb-10">
-        <Header
-          handleWorkScroll={handleWorkScroll}
-          handleAboutScroll={handleAboutScroll}
-        />
-        <div className="laptop:mt-20 mt-10">
-          <div className="mt-5">
-            <h1
-              ref={textOne}
-              className="text-3xl tablet:text-6xl laptop:text-6xl laptopl:text-8xl p-1 tablet:p-2 text-bold w-4/5 mob:w-full laptop:w-4/5"
-            >
-              {data.headerTaglineOne}
-            </h1>
-            <h1
-              ref={textTwo}
-              className="text-3xl tablet:text-6xl laptop:text-6xl laptopl:text-8xl p-1 tablet:p-2 text-bold w-full laptop:w-4/5"
-            >
-              {data.headerTaglineTwo}
-            </h1>
-            <h1
-              ref={textThree}
-              className="text-3xl tablet:text-6xl laptop:text-6xl laptopl:text-8xl p-1 tablet:p-2 text-bold w-full laptop:w-4/5"
-            >
-              {data.headerTaglineThree}
-            </h1>
-            <h1
-              ref={textFour}
-              className="text-3xl tablet:text-6xl laptop:text-6xl laptopl:text-8xl p-1 tablet:p-2 text-bold w-full laptop:w-4/5"
-            >
-              {data.headerTaglineFour}
-            </h1>
+      <main>
+        <section className="hero-section container mx-auto">
+          <div className="hero-copy">
+            <p className="eyebrow"><span className="status-pulse" /> Available for thoughtful technical work</p>
+            <h1>{heroLine.map((line, index) => <span key={index} className={index === 1 ? "hero-accent" : ""}>{line}</span>)}</h1>
+            <p className="hero-summary">{data.aboutpara}</p>
+            <div className="hero-actions">
+              <button className="primary-action" onClick={() => scrollTo(workRef)}>Explore selected work <span>↓</span></button>
+              <a className="text-action" href="mailto:husam1551@gmail.com">Let’s build something useful <span>↗</span></a>
+            </div>
           </div>
-
-          <Socials className="mt-2 laptop:mt-5" />
-        </div>
-        <div className="mt-10 laptop:mt-30 p-2 laptop:p-0" ref={workRef}>
-          <h1 className="text-2xl text-bold">Work.</h1>
-
-          <div className="mt-5 laptop:mt-10 grid grid-cols-1 tablet:grid-cols-2 gap-4">
-            {data.projects.map((project) => (
-              <WorkCard
-                key={project.id}
-                img={project.imageSrc}
-                name={project.title}
-                description={project.description}
-                onClick={() => window.open(project.url)}
-              />
-            ))}
+          <div className="hero-aside" aria-label="Profile summary">
+            <div className="signal-card"><span className="signal-label">CURRENT SIGNAL</span><strong>Data × Products × Business</strong><span className="signal-line" /></div>
+            <div className="hero-index">01 <span>/</span> 04</div>
           </div>
-        </div>
+        </section>
 
-        <div className="mt-10 laptop:mt-30 p-2 laptop:p-0">
-          <h1 className="tablet:m-10 text-2xl text-bold">Services.</h1>
-          <div className="mt-5 tablet:m-10 grid grid-cols-1 laptop:grid-cols-2 gap-6">
-            {data.services.map((service, index) => (
-              <ServiceCard
-                key={index}
-                name={service.title}
-                description={service.description}
-              />
-            ))}
-          </div>
-        </div>
-        {/* This button should not go into production */}
-        {process.env.NODE_ENV === "development" && (
-          <div className="fixed bottom-5 right-5">
-            <Link href="/edit">
-              <Button type="primary">Edit Data</Button>
-            </Link>
-          </div>
-        )}
-        <div className="mt-10 laptop:mt-40 p-2 laptop:p-0" ref={aboutRef}>
-          <h1 className="tablet:m-10 text-2xl text-bold">About.</h1>
-          <p className="tablet:m-10 mt-2 text-xl laptop:text-3xl w-full laptop:w-3/5">
-            {data.aboutpara}
-          </p>
-        </div>
-        <Footer />
-      </div>
+        <section className="ticker" aria-label="Capabilities">
+          <div className="ticker-track"><span>AI & AGENTIC WORKFLOWS</span><i /> <span>FULL-STACK SYSTEMS</span><i /> <span>COMPUTER VISION</span><i /> <span>PRODUCT EXECUTION</span><i /> <span>AI & AGENTIC WORKFLOWS</span></div>
+        </section>
+
+        <section className="content-section container mx-auto" ref={workRef} id="work">
+          <div className="section-heading"><div><p className="eyebrow">Selected systems</p><h2>Work that moves<br /><em>from signal to scale.</em></h2></div><p className="section-note">A focused set of platforms, models, and products built to turn complexity into momentum.</p></div>
+          <div className="project-grid">{data.projects.map((project, index) => <WorkCard key={project.id} index={index} img={project.imageSrc} name={project.title} description={project.description} onClick={() => project.url && window.open(project.url, "_blank", "noopener,noreferrer")} />)}</div>
+        </section>
+
+        <section className="content-section services-section container mx-auto">
+          <div className="section-heading"><div><p className="eyebrow">Capability stack</p><h2>Useful at every<br /><em>layer of the system.</em></h2></div><p className="section-note">From strategy to QA, the work is designed to survive contact with real teams, real users, and real constraints.</p></div>
+          <div className="services-grid">{data.services.map((service, index) => <ServiceCard key={service.id || index} index={index} name={service.title} description={service.description} />)}</div>
+        </section>
+
+        <section className="about-section container mx-auto" ref={aboutRef} id="about">
+          <div className="about-label"><span className="eyebrow">About the practice</span><span className="about-mark">◎</span></div>
+          <div className="about-copy"><h2>{data.aboutpara}</h2><div className="about-bottom"><Socials /><p>Based in the space between technical clarity and business execution.</p></div></div>
+        </section>
+      </main>
+      <Footer />
     </div>
   );
 }
