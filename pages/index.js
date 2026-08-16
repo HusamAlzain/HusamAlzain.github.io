@@ -58,7 +58,7 @@ export default function Home() {
         </section>
 
         <section className="ticker" aria-label="Capabilities">
-          <div className="ticker-track"><span>AI & AGENTIC WORKFLOWS</span><i /> <span>FULL-STACK SYSTEMS</span><i /> <span>COMPUTER VISION</span><i /> <span>PRODUCT EXECUTION</span><i /> <span>AI & AGENTIC WORKFLOWS</span></div>
+          <div className="ticker-track"><div className="ticker-group"><span>AI & AGENTIC WORKFLOWS</span><i /><span>FULL-STACK SYSTEMS</span><i /><span>COMPUTER VISION</span><i /><span>PRODUCT EXECUTION</span><i /></div><div className="ticker-group" aria-hidden="true"><span>AI & AGENTIC WORKFLOWS</span><i /><span>FULL-STACK SYSTEMS</span><i /><span>COMPUTER VISION</span><i /><span>PRODUCT EXECUTION</span><i /></div><div className="ticker-group" aria-hidden="true"><span>AI & AGENTIC WORKFLOWS</span><i /><span>FULL-STACK SYSTEMS</span><i /><span>COMPUTER VISION</span><i /><span>PRODUCT EXECUTION</span><i /></div></div>
         </section>
 
         <section className="content-section container mx-auto" ref={workRef} id="work">

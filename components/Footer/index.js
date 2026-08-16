@@ -1,33 +1,16 @@
-import React from "react";
 import Socials from "../Socials";
-import Link from "next/link";
-import Button from "../Button";
 
-const Footer = ({}) => {
-  return (
-    <>
-      <div className="mt-5 laptop:mt-40 p-2 laptop:p-0">
-        <div>
-          <h1 className="text-2xl text-bold">Contact.</h1>
-          <div className="mt-10">
-            <h1 className="text-3xl tablet:text-6xl laptop:text-6xl laptopl:text-8xl text-bold">
-              LET&apos;S WORK
-            </h1>
-            <h1 className="text-3xl tablet:text-6xl laptop:text-6xl laptopl:text-8xl text-bold">
-              TOGETHER
-            </h1>
-            <Button type="primary" onClick={() => window.open('https://calendar.app.google/53KRN6ydvF1XEKzW8', '_blank')}>Schedule a call</Button>
-            <div className="mt-10">
-              <Socials />
-            </div>
-          </div>
-        </div>
+const Footer = () => (
+  <footer className="site-footer">
+    <div className="footer-grid container mx-auto">
+      <div className="footer-label"><span className="eyebrow">Contact.</span><span className="footer-orbit">◎</span></div>
+      <div className="footer-main">
+        <h2>LET&apos;S WORK<br /><em>TOGETHER</em></h2>
+        <div className="footer-actions"><a className="footer-cta" href="https://calendar.app.google/53KRN6ydvF1XEKzW8" target="_blank" rel="noreferrer">Schedule a call <span>↗</span></a><Socials /></div>
       </div>
-      <h1 className="text-sm text-bold mt-2 laptop:mt-10 p-2 laptop:p-0">
-     
-      </h1>
-    </>
-  );
-};
+    </div>
+    <div className="footer-base container mx-auto"><span>© {new Date().getFullYear()} Husam Alzain</span><span>Built between clarity and execution.</span><span>↗</span></div>
+  </footer>
+);
 
 export default Footer;
