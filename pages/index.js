@@ -11,7 +11,9 @@ import ServiceCard from "../components/ServiceCard";
 export default function Home() {
   const workRef = useRef(null);
   const aboutRef = useRef(null);
+  const servicesRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -34,6 +36,13 @@ export default function Home() {
         <nav className="desktop-nav" aria-label="Primary navigation">
           <button onClick={() => scrollTo(workRef)}>Work</button>
           <button onClick={() => scrollTo(aboutRef)}>About</button>
+          <div className="services-nav-wrap" onMouseEnter={() => setServicesOpen(true)} onMouseLeave={() => setServicesOpen(false)}>
+            <button className={`services-nav-trigger ${servicesOpen ? "is-open" : ""}`} aria-expanded={servicesOpen} aria-controls="services-nav-panel" onClick={() => setServicesOpen((open) => !open)}>Services <span>⌄</span></button>
+            <div id="services-nav-panel" className={`services-nav-panel ${servicesOpen ? "is-open" : ""}`} role="dialog" aria-label="Services overview">
+              <div className="services-panel-intro"><div><span className="signal-label">CAPABILITY STACK</span><h2>Services</h2></div><p>Technical depth with a bias toward useful outcomes.</p><span className="services-panel-count">07</span></div>
+              <div className="services-panel-list">{data.services.map((service, index) => <button key={service.id || index} onClick={() => { setServicesOpen(false); scrollTo(servicesRef); }}><span>0{index + 1}</span><strong>{service.title}</strong><em aria-hidden="true">↗</em></button>)}</div>
+            </div>
+          </div>
           {data.showBlog && <Link href="/blog">Journal</Link>}
           {data.showResume && <Link href="/resume">Resume</Link>}
           <a className="nav-contact" href="mailto:husam1551@gmail.com">Start a conversation <span>↗</span></a>
@@ -66,14 +75,19 @@ export default function Home() {
           <div className="project-grid">{data.projects.map((project, index) => <WorkCard key={project.id} index={index} img={project.imageSrc} name={project.title} description={project.description} onClick={() => project.url && window.open(project.url, "_blank", "noopener,noreferrer")} />)}</div>
         </section>
 
-        <section className="content-section services-section container mx-auto">
+        <section className="content-section services-section container mx-auto" ref={servicesRef} id="services">
           <div className="section-heading"><div><p className="eyebrow">Capability stack</p><h2>Useful at every<br /><em>layer of the system.</em></h2></div><p className="section-note">From strategy to QA, the work is designed to survive contact with real teams, real users, and real constraints.</p></div>
           <div className="services-grid">{data.services.map((service, index) => <ServiceCard key={service.id || index} index={index} name={service.title} description={service.description} />)}</div>
         </section>
 
         <section className="about-section container mx-auto" ref={aboutRef} id="about">
           <div className="about-label"><span className="eyebrow">About the practice</span><span className="about-mark">◎</span></div>
-          <div className="about-copy"><h2>{data.aboutpara}</h2><div className="about-bottom"><Socials /><p>Based in the space between technical clarity and business execution.</p></div></div>
+          <div className="about-copy">
+            <h2 className="about-lead">I work where <em>technical clarity</em> meets business execution.</h2>
+            <p className="about-body">{data.aboutpara}</p>
+            <div className="about-principles"><article><span>01</span><h3>Build for the real world.</h3><p>Production-grade systems, measurable outcomes, and fewer operational bottlenecks.</p></article><article><span>02</span><h3>Make complexity legible.</h3><p>Clear product thinking that helps teams move from a promising idea to a dependable release.</p></article><article><span>03</span><h3>Stay close to the signal.</h3><p>Data, feedback, and rigorous QA keep every decision connected to what matters.</p></article></div>
+            <div className="about-bottom"><Socials /><p>Based in the space between technical clarity and business execution.</p></div>
+          </div>
         </section>
       </main>
       <Footer />
