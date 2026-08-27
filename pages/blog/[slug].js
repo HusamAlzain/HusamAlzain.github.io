@@ -7,7 +7,7 @@ import ContentSection from "../../components/ContentSection";
 import Cursor from "../../components/Cursor";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import SEO, { SITE_URL } from "../../components/SEO";
+import SEO, { canonicalUrl } from "../../components/SEO";
 import data from "../../data/portfolio.json";
 import { getAllPosts, getPostBySlug } from "../../utils/api";
 
@@ -20,10 +20,12 @@ const BlogPost = ({ post, relatedPosts }) => {
   const dateObj = post.date ? new Date(post.date) : new Date();
   const published = isNaN(dateObj.getTime()) ? new Date().toISOString() : dateObj.toISOString();
   const description = post.preview || post.tagline || "ملاحظة ميدانية من حسام الزين حول بناء أنظمة مفيدة.";
+  const articleUrl = canonicalUrl(`/blog/${post.slug}`);
+  const wordCount = post.content?.trim().split(/\s+/).filter(Boolean).length || 0;
   
   const structuredData = [
-    { "@context": "https://schema.org", "@type": "BlogPosting", headline: post.title, description, image: post.image, datePublished: published, dateModified: published, author: { "@type": "Person", name: "حسام الزين", url: SITE_URL }, publisher: { "@type": "Person", name: "حسام الزين", url: SITE_URL }, mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/blog/${post.slug}` } },
-    { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "الرئيسية", item: SITE_URL }, { "@type": "ListItem", position: 2, name: "المدونة", item: `${SITE_URL}/blog` }, { "@type": "ListItem", position: 3, name: post.title, item: `${SITE_URL}/blog/${post.slug}` }] },
+    { "@context": "https://schema.org", "@type": "BlogPosting", inLanguage: "ar-SA", headline: post.title, description, image: post.image, url: articleUrl, datePublished: published, dateModified: published, wordCount, articleSection: "الذكاء الاصطناعي، المنتجات، والتنفيذ", author: { "@type": "Person", name: "حسام الزين", url: canonicalUrl("/") }, publisher: { "@type": "Person", name: "حسام الزين", url: canonicalUrl("/") }, mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl } },
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "الرئيسية", item: canonicalUrl("/") }, { "@type": "ListItem", position: 2, name: "المدونة", item: canonicalUrl("/blog") }, { "@type": "ListItem", position: 3, name: post.title, item: articleUrl }] },
   ];
 
   return (
@@ -41,7 +43,7 @@ const BlogPost = ({ post, relatedPosts }) => {
                 <h1>{post.title}</h1>
                 <p className="article-tagline">{post.tagline}</p>
                 <div className="article-meta">
-                  <time dateTime={published}>{new Date(post.date).toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric" })}</time>
+                  <time dateTime={published}>{dateObj.toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric" })}</time>
                   <span>بواسطة حسام الزين</span>
                 </div>
               </div>

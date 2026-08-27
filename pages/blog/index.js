@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Button from "../../components/Button";
 import Cursor from "../../components/Cursor";
 import Header from "../../components/Header";
-import SEO, { SITE_URL, SITE_NAME } from "../../components/SEO";
+import SEO, { SITE_NAME, canonicalUrl } from "../../components/SEO";
 import data from "../../data/portfolio.json";
 import { ISOToDate, useIsomorphicLayoutEffect } from "../../utils";
 import { getAllPosts } from "../../utils/api";
@@ -32,13 +32,22 @@ const Blog = ({ posts }) => {
     fetch("/api/blog", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slug }) }).then(() => router.reload(window.location.pathname));
   };
 
+  const itemList = posts.map((post, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    url: canonicalUrl(`/blog/${post.slug}`),
+    name: post.title,
+  }));
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
+    inLanguage: "ar-SA",
     name: "ملاحظات حول الذكاء الاصطناعي والمنتجات والتنفيذ",
-    url: `${SITE_URL}/blog`,
+    url: canonicalUrl("/blog"),
     description: "ملاحظات افتتاحية من حسام الزين حول أنظمة الذكاء الاصطناعي، تنفيذ المنتجات، البيانات، وتسليم البرمجيات الموثوقة.",
-    isPartOf: { "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
+    isPartOf: { "@type": "WebSite", name: SITE_NAME, url: canonicalUrl("/") },
+    mainEntity: { "@type": "ItemList", itemListElement: itemList },
   };
 
   return showBlog.current ? (
