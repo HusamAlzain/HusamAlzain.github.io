@@ -1,10 +1,18 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import data from "../../data/portfolio.json";
+import arabicData from "../../data/portfolio.json";
+import englishData from "../../data/portfolio.en.json";
+import translations from "../../data/translations";
+import { useLanguage } from "../../contexts/LanguageContext";
+
+const datasets = { ar: arabicData, en: englishData };
 
 const Header = ({ handleWorkScroll, handleAboutScroll, isBlog }) => {
   const router = useRouter();
+  const { language, toggleLanguage } = useLanguage();
+  const text = translations[language];
+  const data = datasets[language];
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
 
@@ -15,14 +23,14 @@ const Header = ({ handleWorkScroll, handleAboutScroll, isBlog }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const { name, showBlog, showResume } = data;
-
   const navigateTo = (path, scrollFn) => {
     if (router.pathname === "/") {
       if (scrollFn) scrollFn();
       else window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      router.push(path);
+      router.push(path).then(() => {
+        if (scrollFn) window.setTimeout(scrollFn, 100);
+      });
     }
   };
 
@@ -31,55 +39,58 @@ const Header = ({ handleWorkScroll, handleAboutScroll, isBlog }) => {
       <button
         className="brand-mark"
         onClick={() => navigateTo("/")}
-        aria-label="العودة للأعلى"
+        aria-label={text.nav.backToTop}
+        type="button"
       >
         <span className="brand-orbit" />
-        {name}
+        {data.name}
         <span className="brand-dot">.</span>
       </button>
-      <nav className="desktop-nav" aria-label="التنقل الرئيسي">
-        <button onClick={() => navigateTo("/", handleWorkScroll)}>الأعمال</button>
-        <button onClick={() => navigateTo("/", handleAboutScroll)}>عني</button>
+      <nav className="desktop-nav" aria-label={text.nav.primary}>
+        <button type="button" onClick={() => navigateTo("/", handleWorkScroll)}>{text.nav.work}</button>
+        <button type="button" onClick={() => navigateTo("/", handleAboutScroll)}>{text.nav.about}</button>
         <div
           className="services-nav-wrap"
           onMouseEnter={() => setServicesOpen(true)}
           onMouseLeave={() => setServicesOpen(false)}
         >
           <button
+            type="button"
             className={`services-nav-trigger ${servicesOpen ? "is-open" : ""}`}
             aria-expanded={servicesOpen}
             aria-controls="services-nav-panel"
             onClick={() => setServicesOpen((open) => !open)}
           >
-            الخدمات <span>⌄</span>
+            {text.nav.services} <span>⌄</span>
           </button>
           <div
             id="services-nav-panel"
             className={`services-nav-panel ${servicesOpen ? "is-open" : ""}`}
             role="dialog"
-            aria-label="نظرة عامة على الخدمات"
+            aria-label={text.servicesPanel.ariaLabel}
           >
             <div className="services-panel-intro">
               <div>
-                <span className="signal-label">مجموعة القدرات</span>
-                <h2>الخدمات</h2>
+                <span className="signal-label">{text.servicesPanel.eyebrow}</span>
+                <h2>{text.servicesPanel.title}</h2>
               </div>
-              <p>عمق تقني مع انحياز نحو النتائج المفيدة.</p>
-              <span className="services-panel-count">0{data.services.length}</span>
+              <p>{text.servicesPanel.description}</p>
+              <span className="services-panel-count">{String(data.services.length).padStart(2, "0")}</span>
             </div>
             <div className="services-panel-list">
               {data.services.map((service, index) => (
                 <button
+                  type="button"
                   key={service.id || index}
                   onClick={() => {
                     setServicesOpen(false);
                     navigateTo("/", () => {
-                      const el = document.getElementById("services");
-                      el?.scrollIntoView({ behavior: "smooth" });
+                      const element = document.getElementById("services");
+                      element?.scrollIntoView({ behavior: "smooth" });
                     });
                   }}
                 >
-                  <span>0{index + 1}</span>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
                   <strong>{service.title}</strong>
                   <em aria-hidden="true">↗</em>
                 </button>
@@ -87,10 +98,21 @@ const Header = ({ handleWorkScroll, handleAboutScroll, isBlog }) => {
             </div>
           </div>
         </div>
-        {showBlog && <Link href="/blog">المدونة</Link>}
-        {showResume && <Link href="/resume">السيرة الذاتية</Link>}
+        {data.showBlog && <Link href="/blog">{text.nav.blog}</Link>}
+        {data.showResume && <Link href="/resume">{text.nav.resume}</Link>}
+        <button
+          type="button"
+          className="language-toggle"
+          onClick={toggleLanguage}
+          aria-label={text.switchToLabel}
+          title={text.switchToLabel}
+        >
+          <span className="language-toggle-current">{text.languageName}</span>
+          <span className="language-toggle-mark" aria-hidden="true">↔</span>
+          <span className="language-toggle-next">{text.switchTo}</span>
+        </button>
         <a className="nav-contact contact-link" href="mailto:husam1551@gmail.com">
-          ابدأ محادثة <span>↗</span>
+          {text.nav.contact} <span>↗</span>
         </a>
       </nav>
     </header>

@@ -4,20 +4,22 @@ const matter = require("gray-matter");
 
 const siteUrl = "https://husamalzain.github.io";
 const postsDirectory = path.join(process.cwd(), "_posts");
+const localizedPostsDirectory = path.join(postsDirectory, "ar");
 const publicDirectory = path.join(process.cwd(), "public");
 
 const escapeXml = (value) => String(value)
   .replace(/&/g, "&amp;")
   .replace(/</g, "&lt;")
   .replace(/>/g, "&gt;")
-  .replace(/"/g, "&quot;")
+  .replace(/\"/g, "&quot;")
   .replace(/'/g, "&apos;");
 
-const posts = fs.readdirSync(postsDirectory)
+const sourceDirectory = fs.existsSync(localizedPostsDirectory) ? localizedPostsDirectory : postsDirectory;
+const posts = fs.readdirSync(sourceDirectory)
   .filter((file) => file.endsWith(".md"))
   .map((file) => {
     const slug = file.replace(/\.md$/, "");
-    const source = fs.readFileSync(path.join(postsDirectory, file), "utf8");
+    const source = fs.readFileSync(path.join(sourceDirectory, file), "utf8");
     const { data } = matter(source);
     return { slug, date: data.date ? new Date(data.date) : null };
   })

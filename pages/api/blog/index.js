@@ -4,27 +4,36 @@ import { join } from "path";
 import { v4 as uuidv4 } from "uuid";
 import { getRandomImage } from "../../../utils";
 
+const getLocale = (locale) => (locale === "en" ? "en" : "ar");
+
 export default function handler(req, res) {
-  const postsfolder = join(process.cwd(), `/_posts/${uuidv4()}.md`);
-  if (process.env.NODE_ENV === "development") {
-    if (req.method === "POST") {
-      const data = matter.stringify("# New Blog", {
-        date: new Date().toISOString(),
-        title: "New Blog",
-        tagline: "Amazing New Blog",
-        preview:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-        image: getRandomImage(),
-      });
-      fs.writeFileSync(postsfolder, data, (err) => console.error(err));
-      res.status(200).json({ status: "CREATED" });
-    }
-    if (req.method === "DELETE") {
-      const deleteFile = join(process.cwd(), `/_posts/${req.body.slug}.md`);
-      fs.unlinkSync(deleteFile);
-      res.status(200).json({ status: "DONE" });
-    }
-  } else {
-    res.status(200).json({ name: "This route works in development mode only" });
+  if (process.env.NODE_ENV !== "development") {
+    return res.status(200).json({ name: "This route works in development mode only" });
   }
+
+  const locale = getLocale(req.body?.locale);
+  const localeDirectory = join(process.cwd(), `_posts/${locale}`);
+  fs.mkdirSync(localeDirectory, { recursive: true });
+
+  if (req.method === "POST") {
+    const isEnglish = locale === "en";
+    const postPath = join(localeDirectory, `${uuidv4()}.md`);
+    const data = matter.stringify(isEnglish ? "# New Blog" : "# منشور جديد", {
+      date: new Date().toISOString(),
+      title: isEnglish ? "New Blog" : "منشور جديد",
+      tagline: isEnglish ? "An editorial note worth sharing." : "ملاحظة تحريرية تستحق المشاركة.",
+      preview: isEnglish ? "A short preview for this new blog post." : "معاينة قصيرة لهذا المنشور الجديد.",
+      image: getRandomImage(),
+    });
+    fs.writeFileSync(postPath, data, "utf8");
+    return res.status(200).json({ status: "CREATED" });
+  }
+
+  if (req.method === "DELETE") {
+    const deleteFile = join(localeDirectory, `${req.body.slug}.md`);
+    if (fs.existsSync(deleteFile)) fs.unlinkSync(deleteFile);
+    return res.status(200).json({ status: "DONE" });
+  }
+
+  return res.status(405).json({ status: "METHOD_NOT_ALLOWED" });
 }

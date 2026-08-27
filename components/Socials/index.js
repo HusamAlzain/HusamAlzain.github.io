@@ -1,14 +1,24 @@
 import React from "react";
 import Button from "../Button";
+import arabicData from "../../data/portfolio.json";
+import englishData from "../../data/portfolio.en.json";
+import { useLanguage } from "../../contexts/LanguageContext";
 
-import yourData from "../../data/portfolio.json";
+const datasets = { ar: arabicData, en: englishData };
+const labels = {
+  ar: { Github: "GitHub", LinkedIn: "LinkedIn", Email: "البريد الإلكتروني" },
+  en: { Github: "GitHub", LinkedIn: "LinkedIn", Email: "Email" },
+};
 
-const Socials = ({ className }) => {
+const Socials = ({ className = "" }) => {
+  const { language } = useLanguage();
+  const data = datasets[language];
+
   return (
     <div className={`${className} flex flex-wrap mob:flex-nowrap link`}>
-      {yourData.socials.map((social, index) => (
+      {data.socials.map((social, index) => (
         <Button key={index} classes="contact-link" onClick={() => window.open(social.link, "_blank", "noopener,noreferrer")}>
-          {social.title}
+          {labels[language][social.title] || social.title}
         </Button>
       ))}
     </div>

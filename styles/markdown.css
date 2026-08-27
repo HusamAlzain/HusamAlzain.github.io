@@ -6,9 +6,9 @@
 .markdown-class p { margin-bottom: 1.6em; }
 .markdown-class a { color: var(--cyan); text-decoration: underline; text-underline-offset: 4px; transition: color 0.2s ease; }
 .markdown-class a:hover { color: var(--ink); }
-.markdown-class ul, .markdown-class ol { margin-bottom: 1.6em; padding-left: 1.5em; }
+.markdown-class ul, .markdown-class ol { margin-bottom: 1.6em; padding-inline-start: 1.5em; }
 .markdown-class li { margin-bottom: 0.6em; }
-.markdown-class blockquote { border-left: 3px solid var(--cyan); padding-left: 1.5em; font-style: italic; color: var(--ink); margin: 2em 0; }
-.markdown-class code { font-family: 'DM Mono', monospace; background: var(--line); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; }
-.markdown-class pre { background: #0d1117; padding: 1.5em; border-radius: 8px; overflow-x: auto; margin: 2em 0; border: 1px solid var(--line); }
-.markdown-class img { border-radius: 8px; margin: 2.5em 0; border: 1px solid var(--line); }
+.markdown-class blockquote { border-inline-start: 3px solid var(--cyan); padding-inline-start: 1.5em; font-style: italic; color: var(--ink); margin: 2em 0; }
+.markdown-class code { font-family: 'DM Mono', monospace; background: var(--line); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; direction: ltr; unicode-bidi: embed; }
+.markdown-class pre { direction: ltr; text-align: left; background: #0d1117; padding: 1.5em; border-radius: 8px; overflow-x: auto; margin: 2em 0; border: 1px solid var(--line); }
+.markdown-class img { max-width: 100%; border-radius: 8px; margin: 2.5em 0; border: 1px solid var(--line); }

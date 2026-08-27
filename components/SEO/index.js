@@ -1,7 +1,8 @@
 import Head from "next/head";
 
 export const SITE_URL = "https://husamalzain.github.io";
-export const SITE_NAME = "حسام الزين";
+export const SITE_NAMES = { ar: "حسام الزين", en: "Husam Alzain" };
+export const SITE_NAME = SITE_NAMES.ar;
 export const DEFAULT_TITLE = `${SITE_NAME} — مهندس ذكاء اصطناعي وقائد تقني`;
 export const DEFAULT_DESCRIPTION =
   "حسام الزين مهندس ذكاء اصطناعي وقائد تقني يبني أنظمة بيانات ومنتجات ومنصات برمجية موثوقة.";
@@ -29,10 +30,14 @@ const SEO = ({
   articleSection,
   keywords = [],
   structuredData,
+  language = "ar",
 }) => {
   const canonical = canonicalUrl(path);
   const imageUrl = image.startsWith("http") ? image : absoluteUrl(image);
-  const pageTitle = title ? `${title} — ${SITE_NAME}` : DEFAULT_TITLE;
+  const siteName = SITE_NAMES[language] || SITE_NAMES.ar;
+  const pageTitle = title ? `${title} — ${siteName}` : DEFAULT_TITLE;
+  const locale = language === "ar" ? "ar-SA" : "en-US";
+  const openGraphLocale = language === "ar" ? "ar_SA" : "en_US";
   const graph = structuredData
     ? Array.isArray(structuredData)
       ? structuredData
@@ -43,22 +48,23 @@ const SEO = ({
     <Head>
       <title>{pageTitle}</title>
       <meta name="description" content={description} />
-      <meta name="language" content="Arabic" />
-      <meta httpEquiv="content-language" content="ar-SA" />
+      <meta name="language" content={language === "ar" ? "Arabic" : "English"} />
+      <meta httpEquiv="content-language" content={locale} />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
       <link rel="canonical" href={canonical} />
       <link rel="alternate" hrefLang="ar-SA" href={canonical} />
+      <link rel="alternate" hrefLang="en-US" href={canonical} />
       <link rel="alternate" hrefLang="x-default" href={canonical} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={canonical} />
       <meta property="og:title" content={pageTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={imageUrl} />
-      <meta property="og:image:alt" content={title || SITE_NAME} />
-      <meta property="og:site_name" content={SITE_NAME} />
-      <meta property="og:locale" content="ar_SA" />
+      <meta property="og:image:alt" content={title || siteName} />
+      <meta property="og:site_name" content={siteName} />
+      <meta property="og:locale" content={openGraphLocale} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={description} />

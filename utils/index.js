@@ -3,17 +3,11 @@ import { useLayoutEffect, useEffect } from "react";
 export const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-export function ISOToDate(date) {
-  if (date) {
-    let convertDate = new Date(date);
-    return (
-      convertDate.getFullYear() +
-      "-" +
-      (convertDate.getMonth() + 1) +
-      "-" +
-      convertDate.getDate()
-    );
-  }
+export function ISOToDate(date, locale = "en-US") {
+  if (!date) return "";
+  const convertDate = new Date(date);
+  if (Number.isNaN(convertDate.getTime())) return "";
+  return new Intl.DateTimeFormat(locale, { year: "numeric", month: "short", day: "numeric" }).format(convertDate);
 }
 
 export function getRandomImage() {

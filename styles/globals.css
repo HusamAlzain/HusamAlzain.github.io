@@ -286,3 +286,51 @@ button { color: inherit; }
 [dir="rtl"] .services-panel-list button em { transform: scaleX(-1); }
 .services-panel-list button:hover em { color: var(--cyan); transform: translate(-2px, -2px) scaleX(-1); }
 [dir="ltr"] .services-panel-list button:hover em { transform: translate(2px, -2px); }
+
+/* Bilingual interface */
+html[dir="ltr"] body { font-family: var(--font-sans); text-align: left; }
+html[dir="rtl"] body { font-family: var(--font-arabic), var(--font-sans); text-align: right; }
+html[dir="ltr"] .ticker-track { animation-name: ticker-ltr; }
+html[dir="rtl"] .ticker-track { animation-name: ticker-rtl; }
+
+@keyframes ticker-ltr { to { transform: translateX(-50%); } }
+@keyframes ticker-rtl { to { transform: translateX(50%); } }
+
+.desktop-nav .language-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, .02);
+  font-size: 10px;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.desktop-nav .language-toggle:hover,
+.desktop-nav .language-toggle:focus-visible {
+  color: var(--ink);
+  border-color: rgba(121, 229, 255, .42);
+  background: rgba(121, 229, 255, .08);
+  transform: translateY(-1px);
+}
+.language-toggle-current { color: var(--ink); font-weight: 600; }
+.language-toggle-mark { color: var(--cyan); font-family: var(--font-mono); font-size: 12px; }
+.language-toggle-next { color: var(--dim); }
+
+[dir="ltr"] .services-nav-panel { transform-origin: top right; }
+[dir="rtl"] .services-nav-panel { transform-origin: top left; }
+[dir="ltr"] .services-panel-intro { grid-template-columns: 40px 260px 1fr; }
+[dir="ltr"] .services-panel-intro > div { grid-column: 3; }
+[dir="ltr"] .services-panel-intro > p { grid-column: 2; grid-row: 1; }
+[dir="ltr"] .services-panel-count { grid-column: 1; grid-row: 1; text-align: start; }
+
+@media (max-width: 767px) {
+  .desktop-nav .language-toggle { display: inline-flex; min-height: 30px; padding: 6px 8px; gap: 5px; font-size: 9px; }
+  .language-toggle-current { display: none; }
+  .desktop-nav { gap: 8px; }
+}

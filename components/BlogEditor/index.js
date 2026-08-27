@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const BlogEditor = ({ post, close, refresh }) => {
+const BlogEditor = ({ post, locale = "ar", close, refresh }) => {
   const { theme } = useTheme();
   const [currentTabs, setCurrentTabs] = useState("BLOGDETAILS");
   const [blogContent, setBlogContent] = useState(post.content);
@@ -27,6 +27,7 @@ const BlogEditor = ({ post, close, refresh }) => {
         },
         body: JSON.stringify({
           slug: post.slug,
+          locale,
           content: blogContent,
           variables: blogVariables,
         }),
