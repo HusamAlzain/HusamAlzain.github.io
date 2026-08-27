@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import Head from "next/head";
-import Link from "next/link";
+import { useRef } from "react";
+import SEO, { SITE_URL } from "../components/SEO";
 import data from "../data/portfolio.json";
 import AuroraField from "../components/AuroraField";
+import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Socials from "../components/Socials";
 import WorkCard from "../components/WorkCard";
@@ -12,81 +12,153 @@ export default function Home() {
   const workRef = useRef(null);
   const aboutRef = useRef(null);
   const servicesRef = useRef(null);
-  const [scrolled, setScrolled] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 32);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const scrollTo = (ref) => ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  const heroLine = [data.headerTaglineOne, data.headerTaglineTwo, data.headerTaglineThree, data.headerTaglineFour].filter(Boolean);
 
   return (
     <div className="site-shell">
-      <Head><title>{data.name} — AI Engineer & Technical Leader</title></Head>
+      <SEO 
+        title="مهندس ذكاء اصطناعي وقائد تقني" 
+        description="حسام الزين يبني أنظمة بيانات، منتجات ذكاء اصطناعي، ومنصات برمجية موثوقة تربط الوضوح التقني بتنفيذ الأعمال." 
+        path="/" 
+        keywords={["مهندس ذكاء اصطناعي السعودية", "مهندس تعلم آلي", "مطور full-stack", "أنظمة بيانات", "استراتيجية منتجات الذكاء الاصطناعي"]} 
+        structuredData={[
+          {"@context":"https://schema.org","@type":"WebSite","name":"حسام الزين","url":SITE_URL,"description":"مهندس ذكاء اصطناعي يبني أنظمة بيانات ومنتجات ومنصات برمجية موثوقة."},
+          {"@context":"https://schema.org","@type":"ProfessionalService","name":"حسام الزين — هندسة الذكاء الاصطناعي والقيادة التقنية","url":SITE_URL,"description":"هندسة الذكاء الاصطناعي، إدارة المنتجات التقنية، الأنظمة المتكاملة، تحليلات البيانات، وضمان الجودة."}
+        ]} 
+      />
       <AuroraField />
-      <header className={`site-nav ${scrolled ? "site-nav-scrolled" : ""}`}>
-        <button className="brand-mark" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Back to top">
-          <span className="brand-orbit" />{data.name}<span className="brand-dot">.</span>
-        </button>
-        <nav className="desktop-nav" aria-label="Primary navigation">
-          <button onClick={() => scrollTo(workRef)}>Work</button>
-          <button onClick={() => scrollTo(aboutRef)}>About</button>
-          <div className="services-nav-wrap" onMouseEnter={() => setServicesOpen(true)} onMouseLeave={() => setServicesOpen(false)}>
-            <button className={`services-nav-trigger ${servicesOpen ? "is-open" : ""}`} aria-expanded={servicesOpen} aria-controls="services-nav-panel" onClick={() => setServicesOpen((open) => !open)}>Services <span>⌄</span></button>
-            <div id="services-nav-panel" className={`services-nav-panel ${servicesOpen ? "is-open" : ""}`} role="dialog" aria-label="Services overview">
-              <div className="services-panel-intro"><div><span className="signal-label">CAPABILITY STACK</span><h2>Services</h2></div><p>Technical depth with a bias toward useful outcomes.</p><span className="services-panel-count">07</span></div>
-              <div className="services-panel-list">{data.services.map((service, index) => <button key={service.id || index} onClick={() => { setServicesOpen(false); scrollTo(servicesRef); }}><span>0{index + 1}</span><strong>{service.title}</strong><em aria-hidden="true">↗</em></button>)}</div>
-            </div>
-          </div>
-          {data.showBlog && <Link href="/blog">Journal</Link>}
-          {data.showResume && <Link href="/resume">Resume</Link>}
-          <a className="nav-contact" href="mailto:husam1551@gmail.com">Start a conversation <span>↗</span></a>
-        </nav>
-      </header>
+      <Header
+        handleWorkScroll={() => scrollTo(workRef)}
+        handleAboutScroll={() => scrollTo(aboutRef)}
+      />
 
       <main>
         <section className="hero-section container mx-auto">
           <div className="hero-copy">
-            <p className="eyebrow"><span className="status-pulse" /> Available for thoughtful technical work</p>
-            <h1>{heroLine.map((line, index) => <span key={index} className={index === 1 ? "hero-accent" : ""}>{line}</span>)}</h1>
+            <div className="hero-greeting">
+              <span className="status-pulse" />
+              <span className="eyebrow">متاح للعمل التقني المدروس</span>
+            </div>
+            <div className="hero-intro">
+              <span className="hero-name">{data.name}<span className="brand-dot">.</span></span>
+              <h1 className="hero-title">مهندس ذكاء اصطناعي<br /><em>وقائد تقني.</em></h1>
+            </div>
+            <p className="hero-tagline">خبرة في البيانات، المنتجات، والأعمال — مقيم في المملكة العربية السعودية.</p>
             <p className="hero-summary">{data.aboutpara}</p>
             <div className="hero-actions">
-              <button className="primary-action" onClick={() => scrollTo(workRef)}>Explore selected work <span>↓</span></button>
-              <a className="text-action" href="mailto:husam1551@gmail.com">Let’s build something useful <span>↗</span></a>
+              <button className="primary-action" onClick={() => scrollTo(workRef)}>استكشف أعمالاً مختارة <span>↓</span></button>
+              <a className="text-action" href="mailto:husam1551@gmail.com">لنقم ببناء شيء مفيد <span>↗</span></a>
             </div>
           </div>
-          <div className="hero-aside" aria-label="Profile summary">
-            <div className="signal-card"><span className="signal-label">CURRENT SIGNAL</span><strong>Data × Products × Business</strong><span className="signal-line" /></div>
+          <div className="hero-aside" aria-label="ملخص الملف الشخصي">
+            <div className="signal-card">
+              <span className="signal-label">الإشارة الحالية</span>
+              <strong>البيانات × المنتجات × الأعمال</strong>
+              <span className="signal-line" />
+            </div>
+            <div className="hero-location">
+              <span className="signal-label">الموقع</span>
+              <p>المدينة المنورة، المملكة العربية السعودية</p>
+            </div>
             <div className="hero-index">01 <span>/</span> 04</div>
           </div>
         </section>
 
-        <section className="ticker" aria-label="Capabilities">
-          <div className="ticker-track"><div className="ticker-group"><span>AI & AGENTIC WORKFLOWS</span><i /><span>FULL-STACK SYSTEMS</span><i /><span>COMPUTER VISION</span><i /><span>PRODUCT EXECUTION</span><i /></div><div className="ticker-group" aria-hidden="true"><span>AI & AGENTIC WORKFLOWS</span><i /><span>FULL-STACK SYSTEMS</span><i /><span>COMPUTER VISION</span><i /><span>PRODUCT EXECUTION</span><i /></div><div className="ticker-group" aria-hidden="true"><span>AI & AGENTIC WORKFLOWS</span><i /><span>FULL-STACK SYSTEMS</span><i /><span>COMPUTER VISION</span><i /><span>PRODUCT EXECUTION</span><i /></div></div>
+        <section className="ticker" aria-label="القدرات">
+          <div className="ticker-track">
+            <div className="ticker-group">
+              <span>سير عمل الذكاء الاصطناعي والوكلاء</span><i />
+              <span>الأنظمة المتكاملة</span><i />
+              <span>رؤية الحاسوب</span><i />
+              <span>تنفيذ المنتجات</span><i />
+            </div>
+            <div className="ticker-group" aria-hidden="true">
+              <span>سير عمل الذكاء الاصطناعي والوكلاء</span><i />
+              <span>الأنظمة المتكاملة</span><i />
+              <span>رؤية الحاسوب</span><i />
+              <span>تنفيذ المنتجات</span><i />
+            </div>
+            <div className="ticker-group" aria-hidden="true">
+              <span>سير عمل الذكاء الاصطناعي والوكلاء</span><i />
+              <span>الأنظمة المتكاملة</span><i />
+              <span>رؤية الحاسوب</span><i />
+              <span>تنفيذ المنتجات</span><i />
+            </div>
+          </div>
         </section>
 
         <section className="content-section container mx-auto" ref={workRef} id="work">
-          <div className="section-heading"><div><p className="eyebrow">Selected systems</p><h2>Work that moves<br /><em>from signal to scale.</em></h2></div><p className="section-note">A focused set of platforms, models, and products built to turn complexity into momentum.</p></div>
-          <div className="project-grid">{data.projects.map((project, index) => <WorkCard key={project.id} index={index} img={project.imageSrc} name={project.title} description={project.description} onClick={() => project.url && window.open(project.url, "_blank", "noopener,noreferrer")} />)}</div>
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">الأنظمة المختارة</p>
+              <h2>أعمال تنتقل<br /><em>من الإشارة إلى النطاق.</em></h2>
+            </div>
+            <p className="section-note">مجموعة مركزة من المنصات والنماذج والمنتجات المصممة لتحويل التعقيد إلى زخم.</p>
+          </div>
+          <div className="project-grid">
+            {data.projects.map((project, index) => (
+              <WorkCard 
+                key={project.id} 
+                index={index} 
+                img={project.imageSrc} 
+                name={project.title} 
+                description={project.description} 
+                onClick={() => project.url && window.open(project.url, "_blank", "noopener,noreferrer")} 
+              />
+            ))}
+          </div>
         </section>
 
         <section className="content-section services-section container mx-auto" ref={servicesRef} id="services">
-          <div className="section-heading"><div><p className="eyebrow">Capability stack</p><h2>Useful at every<br /><em>layer of the system.</em></h2></div><p className="section-note">From strategy to QA, the work is designed to survive contact with real teams, real users, and real constraints.</p></div>
-          <div className="services-grid">{data.services.map((service, index) => <ServiceCard key={service.id || index} index={index} name={service.title} description={service.description} />)}</div>
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">مجموعة القدرات</p>
+              <h2>مفيد في كل<br /><em>طبقة من طبقات النظام.</em></h2>
+            </div>
+            <p className="section-note">من الاستراتيجية إلى ضمان الجودة، تم تصميم العمل للبقاء في مواجهة الفرق الحقيقية، والمستخدمين الحقيقيين، والقيود الحقيقية.</p>
+          </div>
+          <div className="services-grid">
+            {data.services.map((service, index) => (
+              <ServiceCard 
+                key={service.id || index} 
+                index={index} 
+                name={service.title} 
+                description={service.description} 
+              />
+            ))}
+          </div>
         </section>
 
         <section className="about-section container mx-auto" ref={aboutRef} id="about">
-          <div className="about-label"><span className="eyebrow">About the practice</span><span className="about-mark">◎</span></div>
+          <div className="about-label">
+            <span className="eyebrow">عن الممارسة</span>
+            <span className="about-mark">◎</span>
+          </div>
           <div className="about-copy">
-            <h2 className="about-lead">I work where <em>technical clarity</em> meets business execution.</h2>
+            <h2 className="about-lead">أعمل حيث يلتقي <em>الوضوح التقني</em> بتنفيذ الأعمال.</h2>
             <p className="about-body">{data.aboutpara}</p>
-            <div className="about-principles"><article><span>01</span><h3>Build for the real world.</h3><p>Production-grade systems, measurable outcomes, and fewer operational bottlenecks.</p></article><article><span>02</span><h3>Make complexity legible.</h3><p>Clear product thinking that helps teams move from a promising idea to a dependable release.</p></article><article><span>03</span><h3>Stay close to the signal.</h3><p>Data, feedback, and rigorous QA keep every decision connected to what matters.</p></article></div>
-            <div className="about-bottom"><Socials /><p>Based in the space between technical clarity and business execution.</p></div>
+            <div className="about-principles">
+              <article>
+                <span>01</span>
+                <h3>البناء للعالم الحقيقي.</h3>
+                <p>أنظمة على مستوى الإنتاج، نتائج قابلة للقياس، واختناقات تشغيلية أقل.</p>
+              </article>
+              <article>
+                <span>02</span>
+                <h3>جعل التعقيد مقروءاً.</h3>
+                <p>تفكير واضح في المنتج يساعد الفرق على الانتقال من فكرة واعدة إلى إصدار موثوق.</p>
+              </article>
+              <article>
+                <span>03</span>
+                <h3>البقاء قريباً من الإشارة.</h3>
+                <p>البيانات والتعليقات وضمان الجودة الصارم تبقي كل قرار متصلاً بما يهم.</p>
+              </article>
+            </div>
+            <div className="about-bottom">
+              <Socials />
+              <p>مقرنا في المساحة بين الوضوح التقني وتنفيذ الأعمال.</p>
+            </div>
           </div>
         </section>
       </main>

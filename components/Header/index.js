@@ -1,197 +1,99 @@
-import { Popover } from "@headlessui/react";
-import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Button from "../Button";
-// Local Data
+import Link from "next/link";
 import data from "../../data/portfolio.json";
 
 const Header = ({ handleWorkScroll, handleAboutScroll, isBlog }) => {
   const router = useRouter();
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 32);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const { name, showBlog, showResume } = data;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const navigateTo = (path, scrollFn) => {
+    if (router.pathname === "/") {
+      if (scrollFn) scrollFn();
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      router.push(path);
+    }
+  };
 
   return (
-    <>
-      <Popover className="block tablet:hidden mt-5">
-        {({ open }) => (
-          <>
-            <div className="flex items-center justify-between p-2 laptop:p-0">
-              <h1
-                onClick={() => router.push("/")}
-                className="font-medium p-2 laptop:p-0 link"
-              >
-                {name}.
-              </h1>
-
-              <div className="flex items-center">
-                {data.darkMode && (
-                  <Button
-                    onClick={() =>
-                      setTheme(theme === "dark" ? "light" : "dark")
-                    }
-                  >
-                    <img
-                      className="h-6"
-                      src={`/images/${
-                        theme === "dark" ? "moon.svg" : "sun.svg"
-                      }`}
-                    ></img>
-                  </Button>
-                )}
-
-                <Popover.Button>
-                  <img
-                    className="h-5"
-                    src={`/images/${
-                      !open
-                        ? theme === "dark"
-                          ? "menu-white.svg"
-                          : "menu.svg"
-                        : theme === "light"
-                        ? "cancel.svg"
-                        : "cancel-white.svg"
-                    }`}
-                  ></img>
-                </Popover.Button>
-              </div>
-            </div>
-            <Popover.Panel
-              className={`absolute right-0 z-10 w-11/12 p-4 ${
-                theme === "dark" ? "bg-slate-800" : "bg-white"
-              } shadow-md rounded-md`}
-            >
-              {!isBlog ? (
-                <div className="grid grid-cols-1">
-                  <Button onClick={handleWorkScroll}>Work</Button>
-                  <Button onClick={handleAboutScroll}>About</Button>
-                  {showBlog && (
-                    <Button onClick={() => router.push("/blog")}>Blog</Button>
-                  )}
-                  {showResume && (
-                    <Button
-                      onClick={() =>
-                        window.open("mailto:hello@chetanverma.com")
-                      }
-                    >
-                      Resume
-                    </Button>
-                  )}
-
-                  <Button
-                    onClick={() => window.open("mailto:hello@chetanverma.com")}
-                  >
-                    Contact
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1">
-                  <Button onClick={() => router.push("/")} classes="first:ml-1">
-                    Home
-                  </Button>
-                  {showBlog && (
-                    <Button onClick={() => router.push("/blog")}>Blog</Button>
-                  )}
-                  {showResume && (
-                    <Button
-                      onClick={() => router.push("/resume")}
-                      classes="first:ml-1"
-                    >
-                      Resume
-                    </Button>
-                  )}
-
-                  <Button
-                    onClick={() => window.open("mailto:hello@chetanverma.com")}
-                  >
-                    Contact
-                  </Button>
-                </div>
-              )}
-            </Popover.Panel>
-          </>
-        )}
-      </Popover>
-      <div
-        className={`mt-10 hidden flex-row items-center justify-between sticky ${
-          theme === "light" && "bg-white"
-        } dark:text-white top-0 z-10 tablet:flex`}
+    <header className={`site-nav ${scrolled ? "site-nav-scrolled" : ""}`}>
+      <button
+        className="brand-mark"
+        onClick={() => navigateTo("/")}
+        aria-label="العودة للأعلى"
       >
-        <h1
-          onClick={() => router.push("/")}
-          className="font-medium cursor-pointer mob:p-2 laptop:p-0"
+        <span className="brand-orbit" />
+        {name}
+        <span className="brand-dot">.</span>
+      </button>
+      <nav className="desktop-nav" aria-label="التنقل الرئيسي">
+        <button onClick={() => navigateTo("/", handleWorkScroll)}>الأعمال</button>
+        <button onClick={() => navigateTo("/", handleAboutScroll)}>عني</button>
+        <div
+          className="services-nav-wrap"
+          onMouseEnter={() => setServicesOpen(true)}
+          onMouseLeave={() => setServicesOpen(false)}
         >
-          {name}.
-        </h1>
-        {!isBlog ? (
-          <div className="flex">
-            <Button onClick={handleWorkScroll}>Work</Button>
-            <Button onClick={handleAboutScroll}>About</Button>
-            {showBlog && (
-              <Button onClick={() => router.push("/blog")}>Blog</Button>
-            )}
-            {showResume && (
-              <Button
-                onClick={() => router.push("/resume")}
-                classes="first:ml-1"
-              >
-                Resume
-              </Button>
-            )}
-
-            <Button onClick={() => window.open("mailto:hello@chetanverma.com")}>
-              Contact
-            </Button>
-            {mounted && theme && data.darkMode && (
-              <Button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                <img
-                  className="h-6"
-                  src={`/images/${theme === "dark" ? "moon.svg" : "sun.svg"}`}
-                ></img>
-              </Button>
-            )}
+          <button
+            className={`services-nav-trigger ${servicesOpen ? "is-open" : ""}`}
+            aria-expanded={servicesOpen}
+            aria-controls="services-nav-panel"
+            onClick={() => setServicesOpen((open) => !open)}
+          >
+            الخدمات <span>⌄</span>
+          </button>
+          <div
+            id="services-nav-panel"
+            className={`services-nav-panel ${servicesOpen ? "is-open" : ""}`}
+            role="dialog"
+            aria-label="نظرة عامة على الخدمات"
+          >
+            <div className="services-panel-intro">
+              <div>
+                <span className="signal-label">مجموعة القدرات</span>
+                <h2>الخدمات</h2>
+              </div>
+              <p>عمق تقني مع انحياز نحو النتائج المفيدة.</p>
+              <span className="services-panel-count">0{data.services.length}</span>
+            </div>
+            <div className="services-panel-list">
+              {data.services.map((service, index) => (
+                <button
+                  key={service.id || index}
+                  onClick={() => {
+                    setServicesOpen(false);
+                    navigateTo("/", () => {
+                      const el = document.getElementById("services");
+                      el?.scrollIntoView({ behavior: "smooth" });
+                    });
+                  }}
+                >
+                  <span>0{index + 1}</span>
+                  <strong>{service.title}</strong>
+                  <em aria-hidden="true">↗</em>
+                </button>
+              ))}
+            </div>
           </div>
-        ) : (
-          <div className="flex">
-            <Button onClick={() => router.push("/")}>Home</Button>
-            {showBlog && (
-              <Button onClick={() => router.push("/blog")}>Blog</Button>
-            )}
-            {showResume && (
-              <Button
-                onClick={() => router.push("/resume")}
-                classes="first:ml-1"
-              >
-                Resume
-              </Button>
-            )}
-
-            <Button onClick={() => window.open("mailto:hello@chetanverma.com")}>
-              Contact
-            </Button>
-
-            {mounted && theme && data.darkMode && (
-              <Button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                <img
-                  className="h-6"
-                  src={`/images/${theme === "dark" ? "moon.svg" : "sun.svg"}`}
-                ></img>
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
-    </>
+        </div>
+        {showBlog && <Link href="/blog">المدونة</Link>}
+        {showResume && <Link href="/resume">السيرة الذاتية</Link>}
+        <a className="nav-contact contact-link" href="mailto:husam1551@gmail.com">
+          ابدأ محادثة <span>↗</span>
+        </a>
+      </nav>
+    </header>
   );
 };
 

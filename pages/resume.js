@@ -1,132 +1,127 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
-import Cursor from "../components/Cursor";
 import Header from "../components/Header";
-import ProjectResume from "../components/ProjectResume";
+import Footer from "../components/Footer";
 import Socials from "../components/Socials";
-import Button from "../components/Button";
-import { useTheme } from "next-themes";
-// Data
+import SEO from "../components/SEO";
 import data from "../data/portfolio.json";
 
 const Resume = () => {
   const router = useRouter();
-  const theme = useTheme();
-  const [mount, setMount] = useState(false);
   const { name, showResume, resume } = data;
 
-  useEffect(() => {
-    setMount(true);
+  React.useEffect(() => {
     if (!showResume) {
       router.push("/");
     }
-  }, []);
+  }, [showResume, router]);
+
+  if (!showResume) return null;
+
   return (
-    <>
-      {process.env.NODE_ENV === "development" && (
-        <div className="fixed bottom-6 right-6">
-          <Button onClick={() => router.push("/edit")} type={"primary"}>
-            Edit Resume
-          </Button>
-        </div>
-      )}
-      {data.showCursor && <Cursor />}
-      <div
-        className={`container mx-auto mb-10 ${
-          data.showCursor && "cursor-none"
-        }`}
-      >
-        <Header isBlog />
-        {mount && (
-          <div className="mt-10 w-full flex flex-col items-center">
-            <div
-              className={`w-full ${
-                mount && theme.theme === "dark" ? "bg-slate-800" : "bg-gray-50"
-              } max-w-4xl p-20 mob:p-5 desktop:p-20 rounded-lg shadow-sm`}
-            >
-              <h1 className="text-3xl font-bold">{name}</h1>
-              <h2 className="text-xl mt-5">{resume.tagline}</h2>
-              <h2 className="w-4/5 text-xl mt-5 opacity-50">
-                {resume.description}
-              </h2>
-              <div className="mt-2">
-                <Socials />
-              </div>
-              <div className="mt-5">
-                <h1 className="text-2xl font-bold">Experience</h1>
+    <div className="site-shell">
+      <SEO title={`السيرة الذاتية — ${name}`} description={`الخبرة المهنية والمهارات التقنية لـ ${name}.`} path="/resume" />
+      <Header />
+      <main className="container mx-auto pt-40 pb-20">
+        <section className="resume-hero mb-20">
+          <p className="eyebrow mb-4">السيرة الذاتية</p>
+          <h1 className="hero-title mb-8">{name}<span className="brand-dot">.</span></h1>
+          <p className="hero-tagline max-w-2xl">{resume.tagline}</p>
+          <p className="hero-summary max-w-3xl mt-8">{resume.description}</p>
+          <div className="mt-10">
+            <Socials />
+          </div>
+        </section>
 
-                {resume.experiences.map(
-                  ({ id, dates, type, position, bullets }) => (
-                    <ProjectResume
-                      key={id}
-                      dates={dates}
-                      type={type}
-                      position={position}
-                      bullets={bullets}
-                    ></ProjectResume>
-                  )
-                )}
-              </div>
-              <div className="mt-5">
-                <h1 className="text-2xl font-bold">Education</h1>
-                <div className="mt-2">
-                  <h2 className="text-lg">{resume.education.universityName}</h2>
-                  <h3 className="text-sm opacity-75">
-                    {resume.education.universityDate}
-                  </h3>
-                  <p className="text-sm mt-2 opacity-50">
-                    {resume.education.universityPara}
-                  </p>
-                </div>
-              </div>
-              <div className="mt-5">
-                <h1 className="text-2xl font-bold">Skills</h1>
-                <div className="flex mob:flex-col desktop:flex-row justify-between">
-                  {resume.languages && (
-                    <div className="mt-2 mob:mt-5">
-                      <h2 className="text-lg">Languages</h2>
-                      <ul className="list-disc">
-                        {resume.languages.map((language, index) => (
-                          <li key={index} className="ml-5 py-2">
-                            {language}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {resume.frameworks && (
-                    <div className="mt-2 mob:mt-5">
-                      <h2 className="text-lg">Frameworks</h2>
-                      <ul className="list-disc">
-                        {resume.frameworks.map((framework, index) => (
-                          <li key={index} className="ml-5 py-2">
-                            {framework}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {resume.others && (
-                    <div className="mt-2 mob:mt-5">
-                      <h2 className="text-lg">Others</h2>
-                      <ul className="list-disc">
-                        {resume.others.map((other, index) => (
-                          <li key={index} className="ml-5 py-2">
-                            {other}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+        <div className="resume-grid">
+          <section className="resume-section">
+            <div className="section-heading">
+              <div>
+                <p className="eyebrow">احترافي</p>
+                <h2>الخبرة</h2>
               </div>
             </div>
+            <div className="experience-list">
+              {resume.experiences.map((exp) => (
+                <div key={exp.id} className="experience-item py-10 border-t border-[var(--line)]">
+                  <div className="flex justify-between items-baseline mb-4">
+                    <h3 className="text-xl font-bold">{exp.position}</h3>
+                    <span className="text-xs font-mono text-[var(--cyan)] uppercase tracking-widest">{exp.dates}</span>
+                  </div>
+                  <p className="text-sm text-[var(--dim)] mb-6 uppercase tracking-wider">{exp.type}</p>
+                  <ul className="list-none space-y-3">
+                    {exp.bullets.split(",").map((bullet, i) => (
+                      <li key={i} className="text-sm text-[var(--muted)] leading-relaxed flex gap-3">
+                        <span className="text-[var(--cyan)]">—</span>
+                        {bullet.trim()}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <div className="resume-sidebar space-y-20">
+            <section className="resume-section">
+              <div className="section-heading">
+                <div>
+                  <p className="eyebrow">أكاديمي</p>
+                  <h2>التعليم</h2>
+                </div>
+              </div>
+              <div className="py-8 border-t border-[var(--line)]">
+                <h3 className="text-lg font-bold mb-2">{resume.education.universityName}</h3>
+                <p className="text-xs font-mono text-[var(--cyan)] mb-4 uppercase tracking-widest">{resume.education.universityDate}</p>
+                <p className="text-sm text-[var(--muted)] leading-relaxed">{resume.education.universityPara}</p>
+              </div>
+            </section>
+
+            <section className="resume-section">
+              <div className="section-heading">
+                <div>
+                  <p className="eyebrow">تقني</p>
+                  <h2>المهارات</h2>
+                </div>
+              </div>
+              <div className="space-y-10 border-t border-[var(--line)] pt-8">
+                {resume.languages && (
+                  <div>
+                    <h3 className="text-xs font-mono text-[var(--dim)] uppercase tracking-widest mb-4">اللغات</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {resume.languages.map((lang, i) => (
+                        <span key={i} className="text-xs px-3 py-1 bg-[var(--line)] rounded-full text-[var(--ink)]">{lang}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {resume.frameworks && (
+                  <div>
+                    <h3 className="text-xs font-mono text-[var(--dim)] uppercase tracking-widest mb-4">إطارات العمل</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {resume.frameworks.map((fw, i) => (
+                        <span key={i} className="text-xs px-3 py-1 bg-[var(--line)] rounded-full text-[var(--ink)]">{fw}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {resume.others && (
+                  <div>
+                    <h3 className="text-xs font-mono text-[var(--dim)] uppercase tracking-widest mb-4">الخبرة</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {resume.others.map((other, i) => (
+                        <span key={i} className="text-xs px-3 py-1 bg-[var(--line)] rounded-full text-[var(--ink)]">{other}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

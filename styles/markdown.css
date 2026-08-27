@@ -1,82 +1,14 @@
-/* Markdown Styling */
-
-/* Markdown Container */
-
-.markdown-class {
-  @apply mt-5 p-5;
-}
-
-/* Headings */
-
-.markdown-class h1 {
-  @apply mt-5 text-3xl;
-}
-.markdown-class h2 {
-  @apply mt-5 text-2xl;
-}
-.markdown-class h3 {
-  @apply mt-5 text-xl;
-}
-.markdown-class h4 {
-  @apply mt-5 text-lg;
-}
-.markdown-class h5 {
-  @apply mt-5 text-base;
-}
-.markdown-class h6 {
-  @apply mt-5 text-sm;
-}
-
-.markdown-class a {
-  @apply opacity-80 font-bold text-base underline transition-all duration-200 ease-out hover:opacity-100;
-}
-
-.markdown-class p {
-  @apply mt-2 opacity-80 leading-7 font-normal text-base;
-}
-
-.markdown-class strong {
-  @apply font-extrabold;
-}
-
-.markdown-class hr {
-  @apply my-5;
-}
-
-
-
-/* Markdown Lists */
-
-.markdown-class ol {
-  @apply mt-5 ml-5;
-}
-
-.markdown-class ol li {
-  @apply text-base opacity-80 list-decimal;
-}
-
-.markdown-class ul {
-  @apply mt-5 ml-5;
-}
-
-.markdown-class ul li {
-  @apply text-base opacity-80 list-disc;
-}
-
-/* BlockQuote */
-
-.markdown-class blockquote {
-  @apply p-5 border-l-8 rounded-lg shadow-lg  text-sm bg-slate-200 text-black;
-}
-
-.markdown-class blockquote p {
-  @apply text-black text-sm;
-}
-
-
-
-/* Image */
-
-.markdown-class img {
-  @apply max-h-96 w-full my-5 object-cover rounded-lg shadow-lg;
-}
+.markdown-class { color: var(--muted); line-height: 1.8; font-size: 16px; }
+.markdown-class h1, .markdown-class h2, .markdown-class h3 { color: var(--ink); font-weight: 700; margin-top: 2.5em; margin-bottom: 1.2em; letter-spacing: -0.02em; }
+.markdown-class h1 { font-size: 2.5em; }
+.markdown-class h2 { font-size: 1.8em; border-bottom: 1px solid var(--line); padding-bottom: 0.3em; }
+.markdown-class h3 { font-size: 1.4em; }
+.markdown-class p { margin-bottom: 1.6em; }
+.markdown-class a { color: var(--cyan); text-decoration: underline; text-underline-offset: 4px; transition: color 0.2s ease; }
+.markdown-class a:hover { color: var(--ink); }
+.markdown-class ul, .markdown-class ol { margin-bottom: 1.6em; padding-left: 1.5em; }
+.markdown-class li { margin-bottom: 0.6em; }
+.markdown-class blockquote { border-left: 3px solid var(--cyan); padding-left: 1.5em; font-style: italic; color: var(--ink); margin: 2em 0; }
+.markdown-class code { font-family: 'DM Mono', monospace; background: var(--line); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; }
+.markdown-class pre { background: #0d1117; padding: 1.5em; border-radius: 8px; overflow-x: auto; margin: 2em 0; border: 1px solid var(--line); }
+.markdown-class img { border-radius: 8px; margin: 2.5em 0; border: 1px solid var(--line); }
