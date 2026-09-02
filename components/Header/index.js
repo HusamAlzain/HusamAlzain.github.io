@@ -48,7 +48,7 @@ const Header = ({ handleWorkScroll, handleAboutScroll, handleExperienceScroll, i
       </button>
       <nav className="desktop-nav" aria-label={text.nav.primary}>
         <button type="button" onClick={() => navigateTo("/", handleWorkScroll)}>{text.nav.work}</button>
-        <button type="button" onClick={() => navigateTo("/", handleExperienceScroll)}>{text.nav.experience}</button>
+        {/* <button type="button" onClick={() => navigateTo("/", handleExperienceScroll)}>{text.nav.experience}</button> */}
         <button type="button" onClick={() => navigateTo("/", handleAboutScroll)}>{text.nav.about}</button>
         <div
           className="services-nav-wrap"

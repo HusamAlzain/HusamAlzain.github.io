@@ -10,7 +10,6 @@ const isRootRepo = repo.toLowerCase().endsWith('.github.io');
 
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
   images: {
     unoptimized: true, // GitHub Pages does not support server-side image optimization
   },

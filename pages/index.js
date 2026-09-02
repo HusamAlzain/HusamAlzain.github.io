@@ -113,7 +113,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="content-section container mx-auto" ref={experienceRef} id="experience">
+        {/* <section className="content-section container mx-auto" ref={experienceRef} id="experience">
           <div className="section-heading">
             <div>
               <p className="eyebrow">{text.resume.professional}</p>
@@ -131,7 +131,7 @@ export default function Home() {
               />
             ))}
           </div>
-        </section>
+        </section> */}
 
         <section className="about-section container mx-auto" ref={aboutRef} id="about">
           <div className="about-label">

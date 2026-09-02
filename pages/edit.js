@@ -3,28 +3,70 @@ import Button from "../components/Button";
 import Header from "../components/Header";
 import { v4 as uuidv4 } from "uuid";
 import { useTheme } from "next-themes";
+import jwt from "jsonwebtoken";
+import cookie from "cookie";
+import { useRouter } from "next/router";
 
 // Data
 import yourData from "../data/portfolio.json";
 import Cursor from "../components/Cursor";
+
+export async function getServerSideProps(context) {
+  const cookies = cookie.parse(context.req.headers.cookie || "");
+  const token = cookies.auth;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const jwtSecret = process.env.JWT_SECRET || "supersecretjwtkey";
+
+  try {
+    jwt.verify(token, jwtSecret);
+    return { props: {} };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+}
 
 const Edit = () => {
   // states
   const [data, setData] = useState(yourData);
   const [currentTabs, setCurrentTabs] = useState("HEADER");
   const { theme } = useTheme();
+  const router = useRouter();
 
-  const saveData = () => {
-    if (process.env.NODE_ENV === "development") {
-      fetch("/api/portfolio", {
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" });
+    router.push("/login");
+  };
+
+  const saveData = async () => {
+    try {
+      const res = await fetch("/api/portfolio", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-    } else {
-      alert("This thing only works in development mode.");
+      if (res.ok) {
+        alert("Portfolio updated successfully!");
+      } else {
+        alert("Failed to update portfolio. Are you logged in?");
+      }
+    } catch (err) {
+      alert("An error occurred while saving.");
     }
   };
 
@@ -154,9 +196,12 @@ const Edit = () => {
         <div className={`${theme === "dark" ? "bg-transparent" : "bg-white"}`}>
           <div className="flex items-center justify-between">
             <h1 className="text-4xl">Dashboard</h1>
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
               <Button onClick={saveData} type="primary">
                 Save
+              </Button>
+              <Button onClick={handleLogout}>
+                Logout
               </Button>
             </div>
           </div>
