@@ -10,6 +10,7 @@ import Footer from "../components/Footer";
 import Socials from "../components/Socials";
 import WorkCard from "../components/WorkCard";
 import ServiceCard from "../components/ServiceCard";
+import ProjectResume from "../components/ProjectResume";
 
 const datasets = { ar: arabicData, en: englishData };
 
@@ -20,6 +21,7 @@ export default function Home() {
   const workRef = useRef(null);
   const aboutRef = useRef(null);
   const servicesRef = useRef(null);
+  const experienceRef = useRef(null);
 
   const scrollTo = (ref) => ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   const isArabic = language === "ar";
@@ -39,7 +41,7 @@ export default function Home() {
     <div className="site-shell">
       <SEO title={title} description={description} path="/" keywords={keywords} language={language} structuredData={structuredData} />
       <AuroraField />
-      <Header handleWorkScroll={() => scrollTo(workRef)} handleAboutScroll={() => scrollTo(aboutRef)} />
+      <Header handleWorkScroll={() => scrollTo(workRef)} handleAboutScroll={() => scrollTo(aboutRef)} handleExperienceScroll={() => scrollTo(experienceRef)} />
 
       <main>
         <section className="hero-section container mx-auto">
@@ -108,6 +110,26 @@ export default function Home() {
           </div>
           <div className="services-grid">
             {data.services.map((service, index) => <ServiceCard key={service.id || index} index={index} name={service.title} description={service.description} />)}
+          </div>
+        </section>
+
+        <section className="content-section container mx-auto" ref={experienceRef} id="experience">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">{text.resume.professional}</p>
+              <h2>{text.resume.experience}</h2>
+            </div>
+          </div>
+          <div className="mt-10">
+            {data.resume.experiences.map((exp) => (
+              <ProjectResume
+                key={exp.id}
+                dates={exp.dates}
+                type={exp.type}
+                position={exp.position}
+                bullets={exp.bullets}
+              />
+            ))}
           </div>
         </section>
 

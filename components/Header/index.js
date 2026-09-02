@@ -8,7 +8,7 @@ import { useLanguage } from "../../contexts/LanguageContext";
 
 const datasets = { ar: arabicData, en: englishData };
 
-const Header = ({ handleWorkScroll, handleAboutScroll, isBlog }) => {
+const Header = ({ handleWorkScroll, handleAboutScroll, handleExperienceScroll, isBlog }) => {
   const router = useRouter();
   const { language, toggleLanguage } = useLanguage();
   const text = translations[language];
@@ -48,6 +48,7 @@ const Header = ({ handleWorkScroll, handleAboutScroll, isBlog }) => {
       </button>
       <nav className="desktop-nav" aria-label={text.nav.primary}>
         <button type="button" onClick={() => navigateTo("/", handleWorkScroll)}>{text.nav.work}</button>
+        <button type="button" onClick={() => navigateTo("/", handleExperienceScroll)}>{text.nav.experience}</button>
         <button type="button" onClick={() => navigateTo("/", handleAboutScroll)}>{text.nav.about}</button>
         <div
           className="services-nav-wrap"
