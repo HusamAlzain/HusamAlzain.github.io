@@ -28,8 +28,8 @@ export default function handler(req, res) {
   }
 
   // Use environment variables or fallback values for local testing
-  const validEmail = process.env.ADMIN_EMAIL || "admin@example.com";
-  const validPassword = process.env.ADMIN_PASSWORD || "securepassword";
+  const validEmail = process.env.ADMIN_EMAIL || "husam1551@gmail.com";
+  const validPassword = process.env.ADMIN_PASSWORD || "GoingHome__GG101!";
   const jwtSecret = process.env.JWT_SECRET || "supersecretjwtkey";
 
   if (email === validEmail && password === validPassword) {
